@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { List, ListItem } from "./components/List";
 import SearchField from "./components/SearchField";
 import { TabList, Tabs, Tab, TabPanels } from "./components/Tabs";
-import "./Popup.scss";
 import { isGraphQL, parseEntry } from "./utils";
 import JSONTree from "react-json-tree";
 
