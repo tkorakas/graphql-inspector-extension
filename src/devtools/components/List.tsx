@@ -1,4 +1,4 @@
-import React, { useState, Children, cloneElement } from "react";
+import React, { Children, cloneElement } from "react";
 
 interface ListItemProps {
   isActive?: boolean;
@@ -22,6 +22,9 @@ interface ListProps {
 
 export const List: React.FC<ListProps> = ({ children, active, setActive }) => {
   const transformedChildren = Children.map(children, (child, index) => {
+    if (!React.isValidElement<ListItemProps>(child)) {
+      return child
+    }
     if (child.type === ListItem) {
       return cloneElement(child, {
         isActive: active === index,

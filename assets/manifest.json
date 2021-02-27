@@ -1,15 +1,18 @@
 {
   "manifest_version": 2,
-
   "name": "Chrome Extension (built with TypeScript + React)",
   "description": "A boilerplate project to quickly build a Chrome extension using TypeScript and React (built using webpack).",
   "version": "1.0.0",
-
   "minimum_chrome_version": "43",
   "devtools_page": "devtools.html",
   "icons": {
+    "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "permissions": ["tabs", "http://*/*", "https://*/*"]
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ]
 }

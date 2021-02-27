@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { List, ListItem } from "./components/List";
 import SearchField from "./components/SearchField";
-import { TabList, Tabs, Tab, TabPanels } from "./components/Tabs";
+import { TabList, Tabs, Tab, TabPanels, TabPanel } from "./components/Tabs";
 import { isGraphQL, parseEntry } from "./utils";
 import JSONTree from "react-json-tree";
 
 interface DevToolsPanelProps {
   requestFinished: any;
   getHAR: any;
-  theme: string;
 }
 
 const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
@@ -31,48 +30,70 @@ const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
     return () => requestFinished.removeListener(requestHandler);
   }, [requestHandler]);
 
-  console.log(state);
+  const filteredRequests = useMemo(() => {
+    const regex = new RegExp(search, "i");
+    return state.filter(request => {
+      return request.data.some(operation => operation.name.match(regex));
+    })
+  }, [state, search])
+
 
   if (state.length === 0) {
-    return <div>No GraphQL queries captured yet</div>;
+    return <div style={{ color: '#444' }}>No GraphQL queries captured yet</div>;
   }
 
   return (
     <div>
-      <SearchField onChange={setSearch} value={search} />
-      <div className="layout">
-        <div className="divider">
-          <div className="operations">Operations</div>
-          <List active={active} setActive={setActive}>
-            {state.map((request) => {
-              return request.data.map((d) => (
-                <ListItem key={d.id}>{d.name}</ListItem>
-              ));
-            })}
-          </List>
-        </div>
-        <div>
-          <Tabs>
-            <TabList>
-              <Tab>Variables</Tab>
-              <Tab>Response</Tab>
-              <Tab>Query</Tab>
-            </TabList>
-            <TabPanels>
-              <div className="tabPanel">
-                <JSONTree data={state[active].queryVariables} />
-              </div>
-              <div className="tabPanel">
-                <JSONTree data={state[active].responseBody.data} />
-              </div>
-              <div className="tabPanel">
-                <pre>{`${state[active].bareQuery}`}</pre>
-              </div>
-            </TabPanels>
-          </Tabs>
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <SearchField onChange={setSearch} value={search} />
+        <button style={{ border: 0, backgroundColor: 'rebeccapurple', color: 'white' }} onClick={() => setState([])}>Clear</button>
       </div>
-    </div>
+      {filteredRequests.length === 0 ?
+        <div style={{ color: '#444' }}>No results</div> :
+        <div className="layout">
+          <div className="divider">
+            <div className="operations">Operations</div>
+            <List active={active} setActive={setActive}>
+              {filteredRequests.map((request) => (
+                <ListItem>
+                  <ul style={{ margin: 0, padding: "0 10px" }}>
+                    {
+                      request.data.map((d) => (
+                        <li key={d.id}>{d.name}</li>
+                      ))
+                    }
+                  </ul>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+          <div>
+            <Tabs>
+              <TabList>
+                <Tab>Variables</Tab>
+                <Tab>Response</Tab>
+                <Tab>Query</Tab>
+                <Tab>Details</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <JSONTree data={filteredRequests[active].queryVariables} />
+                </TabPanel>
+                <TabPanel>
+                  <JSONTree data={filteredRequests[active].responseBody.data} />
+                </TabPanel>
+                <TabPanel>
+                  <pre>{`${filteredRequests[active].bareQuery}`}</pre>
+                </TabPanel>
+                <TabPanel>
+                  <JSONTree data={filteredRequests[active]} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </div>
+        </div>
+      }
+    </div >
   );
 };
 

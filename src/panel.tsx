@@ -6,13 +6,10 @@ import ReactDOM from "react-dom";
 let alreadyShown = false;
 
 function createPanel() {
-  console.log("hello");
-
-  const theme = chrome.devtools.panels.themeName || "default";
   chrome.devtools.panels.create(
-    "GraphQL Network",
-    "./icon48.png",
-    "./panel.html",
+    "GraphQL Inspector",
+    "icon16.png",
+    "panel.html",
     (panel) => {
       panel.onShown.addListener((panelWindow) => {
         if (!alreadyShown) {
@@ -20,7 +17,6 @@ function createPanel() {
             <DevToolsPanel
               requestFinished={chrome.devtools.network.onRequestFinished}
               getHAR={chrome.devtools.network.getHAR}
-              theme={theme}
             />,
             panelWindow.document.getElementById("results")
           );

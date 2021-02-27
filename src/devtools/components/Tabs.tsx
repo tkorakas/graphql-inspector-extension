@@ -11,6 +11,9 @@ export const TabList: React.FC<TabListProps> = ({
   setActive,
 }) => {
   const transformedChildren = Children.map(children, (child, index) => {
+    if (!React.isValidElement<TabProps>(child)) {
+      return child
+    }
     if (child.type === Tab) {
       return cloneElement(child, {
         isActive: active === index,
@@ -41,11 +44,19 @@ export const TabPanels: React.FC<TabPanelsProps> = ({ children, active }) => (
   <>{children[active]}</>
 );
 
-const supportedComponents = [TabPanels, TabList];
+export const TabPanel: React.FC = ({ children }) => (
+  <div className="tabPanel">{children}</div>
+);
+
+
+const supportedComponents: React.ReactNode[] = [TabPanels, TabList];
 
 export const Tabs: React.FC = ({ children }) => {
   const [active, setActive] = useState(0);
   const transformedChildren = Children.map(children, (child) => {
+    if (!React.isValidElement<TabListProps | TabPanelsProps>(child)) {
+      return child
+    }
     if (supportedComponents.includes(child.type)) {
       return cloneElement(child, { active, setActive });
     }
