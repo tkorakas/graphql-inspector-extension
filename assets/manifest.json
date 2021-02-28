@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Chrome Extension (built with TypeScript + React)",
-  "description": "A boilerplate project to quickly build a Chrome extension using TypeScript and React (built using webpack).",
+  "name": "GraphQL Inspector",
+  "description": "Inspect GraphQL requests.",
   "version": "1.0.0",
   "minimum_chrome_version": "43",
   "devtools_page": "devtools.html",
