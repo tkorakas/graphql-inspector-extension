@@ -20,7 +20,6 @@
 
 ## Roadmap
 
-- [ ] Testing coverage
 - [ ] GitHub actions
 - [ ] Dependabot
 - [ ] Release to store
