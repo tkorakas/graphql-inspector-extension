@@ -1,6 +1,8 @@
+import { ChromeRequest } from "../../types";
 import { getQueryFromParams } from "./getQueryFromParams";
-import { isContentType } from './isContentType'
-export function isGraphQL(entry) {
+import { isContentType } from './isContentType';
+
+export function isGraphQL(entry: ChromeRequest) {
   try {
     if (isContentType(entry, "application/graphql")) {
       return true;
@@ -18,8 +20,6 @@ export function isGraphQL(entry) {
       return true;
     }
   } catch (e) {
-    console.log(e);
-
     return false;
   }
 }

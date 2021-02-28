@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "GraphQL Inspector",
   "description": "Inspect GraphQL requests.",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "minimum_chrome_version": "43",
   "devtools_page": "devtools.html",
   "icons": {
@@ -11,8 +11,6 @@
     "128": "icon128.png"
   },
   "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
+    "activeTab"
   ]
 }

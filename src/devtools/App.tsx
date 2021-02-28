@@ -5,6 +5,8 @@ import { TabList, Tabs, Tab, TabPanels, TabPanel } from "./components/Tabs";
 import { parseEntry } from "./utils";
 import JSONTree from "react-json-tree";
 import { isGraphQL } from "./utils/isGraphql";
+import { ChromeRequest } from "../types";
+
 
 const App: React.FC = () => {
   const [state, setState] = useState([]);
@@ -12,7 +14,7 @@ const App: React.FC = () => {
   const [active, setActive] = useState(0);
 
   const requestHandler = useCallback(
-    (request) => {
+    (request: ChromeRequest) => {
       console.log('request', request, isGraphQL(request));
 
       if (!isGraphQL(request)) return null;
@@ -24,8 +26,6 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log(chrome.devtools.network.onRequestFinished);
-
     chrome.devtools.network.onRequestFinished.addListener(requestHandler);
     return () => chrome.devtools.network.onRequestFinished.removeListener(requestHandler);
   }, [requestHandler]);

@@ -1,2 +1,5 @@
 dist
 node_modules
+
+dist.zip
+yarn-error.log

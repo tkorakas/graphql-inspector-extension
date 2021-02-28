@@ -1,8 +1,10 @@
-export const isContentType = (entry, contentType) => {
+import { ChromeRequest } from "../../types";
+
+export const isContentType = (entry: ChromeRequest, contentType: string) => {
   return entry.request.headers.some(({ name, value }) => {
     return (
       name.toLowerCase() === "content-type" &&
-      value.split(";")[0].toLowerCase() === contentType.toLowerCase()
+      value.toLowerCase().includes(contentType.toLowerCase())
     );
   });
 }
