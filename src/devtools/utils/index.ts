@@ -1,5 +1,7 @@
 // https://github.com/Ghirro/graphql-network/blob/master/src/lib/utils.js
 import { parse } from "graphql";
+import { getQueryFromParams } from "./getQueryFromParams";
+import { isContentType } from "./isContentType";
 
 function getValue(value) {
   if (value.kind === "ListValue") {
@@ -72,42 +74,6 @@ function internalParse(requestData) {
   });
 }
 
-function isContentType(entry, contentType) {
-  return entry.request.headers.some(({ name, value }) => {
-    return (
-      name.toLowerCase() === "content-type" &&
-      value.split(";")[0].toLowerCase() === contentType.toLowerCase()
-    );
-  });
-}
-
-function getQueryFromParams(params = []) {
-  return decodeURIComponent(
-    params.find((param) => param.name === "query").value
-  );
-}
-
-export function isGraphQL(entry) {
-  try {
-    if (isContentType(entry, "application/graphql")) {
-      return true;
-    }
-
-    if (isContentType(entry, "application/json")) {
-      const json = JSON.parse(entry.request.postData.text);
-      return json.query || json[0].query;
-    }
-
-    if (
-      isContentType(entry, "application/x-www-form-urlencoded") &&
-      getQueryFromParams(entry.request.postData.params)
-    ) {
-      return true;
-    }
-  } catch (e) {
-    return false;
-  }
-}
 
 export function parseEntry(entry) {
   const parsedQueries = [];

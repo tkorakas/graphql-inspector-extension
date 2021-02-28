@@ -2,21 +2,19 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { List, ListItem } from "./components/List";
 import SearchField from "./components/SearchField";
 import { TabList, Tabs, Tab, TabPanels, TabPanel } from "./components/Tabs";
-import { isGraphQL, parseEntry } from "./utils";
+import { parseEntry } from "./utils";
 import JSONTree from "react-json-tree";
+import { isGraphQL } from "./utils/isGraphql";
 
-interface DevToolsPanelProps {
-  requestFinished: any;
-  getHAR: any;
-}
-
-const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
+const App: React.FC = () => {
   const [state, setState] = useState([]);
   const [search, setSearch] = useState<string>("");
   const [active, setActive] = useState(0);
 
   const requestHandler = useCallback(
     (request) => {
+      console.log('request', request, isGraphQL(request));
+
       if (!isGraphQL(request)) return null;
       return parseEntry(request).then((data: any[]) => {
         setState([...state, ...data]);
@@ -26,14 +24,16 @@ const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
   );
 
   useEffect(() => {
-    requestFinished.addListener(requestHandler);
-    return () => requestFinished.removeListener(requestHandler);
+    console.log(chrome.devtools.network.onRequestFinished);
+
+    chrome.devtools.network.onRequestFinished.addListener(requestHandler);
+    return () => chrome.devtools.network.onRequestFinished.removeListener(requestHandler);
   }, [requestHandler]);
 
   const filteredRequests = useMemo(() => {
     const regex = new RegExp(search, "i");
     return state.filter(request => {
-      return request.data.some(operation => operation.name.match(regex));
+      return request?.data.some(operation => operation.name.match(regex));
     })
   }, [state, search])
 
@@ -46,7 +46,7 @@ const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
     <div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <SearchField onChange={setSearch} value={search} />
-        <button style={{ border: 0, backgroundColor: 'rebeccapurple', color: 'white' }} onClick={() => setState([])}>Clear</button>
+        <button style={{ border: 0, backgroundColor: '#e535ab', padding: 10, color: 'white' }} onClick={() => setState([])}>Clear</button>
       </div>
       {filteredRequests.length === 0 ?
         <div style={{ color: '#444' }}>No results</div> :
@@ -97,4 +97,4 @@ const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ requestFinished }) => {
   );
 };
 
-export default DevToolsPanel;
+export default App;

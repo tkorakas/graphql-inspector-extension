@@ -1,5 +1,4 @@
-/* global chrome */
-import DevToolsPanel from "./devtools/DevToolsPanel";
+import App from "./devtools/App";
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -14,10 +13,7 @@ function createPanel() {
       panel.onShown.addListener((panelWindow) => {
         if (!alreadyShown) {
           ReactDOM.render(
-            <DevToolsPanel
-              requestFinished={chrome.devtools.network.onRequestFinished}
-              getHAR={chrome.devtools.network.getHAR}
-            />,
+            <App />,
             panelWindow.document.getElementById("results")
           );
         }

@@ -1,8 +1,13 @@
 # GraphQL Request Inspector
 
+## Screenshots
+<details><summary>📷</summary>
+
 ![Variables](./assets/screenshots/variables.png)
 ![Response](./assets/screenshots/response.png)
 ![Query](./assets/screenshots/query.png)
+
+</details>
 
 ## Installation
 
@@ -12,3 +17,13 @@
 
 - `yarn`
 - `yarn build`
+
+## Roadmap
+
+- [ ] Testing coverage
+- [ ] GitHub actions
+- [ ] Dependabot
+- [ ] Release to store
+- [ ] Search patterns
+- [ ] Copy query
+- [ ] Open to Graphiql
