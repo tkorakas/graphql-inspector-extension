@@ -11,7 +11,7 @@
 
 ## Installation
 
-- Download and unzip the latest [release](https://github.com/tkorakas/skroutz-common-stores/releases/latest)
+- Download and unzip the latest [release](https://github.com/tkorakas/graphql-inspector-extension/releases/latest)
 - Open Chrome and go to "chrome://extensions"
 - Enable developer mode from the top right corner
 - Click to "Load unpacked" button and browse the dist folder you unzipped on the first step
@@ -24,7 +24,7 @@
 
 ## Roadmap
 
-- [ ] GitHub actions
+- [x] GitHub actions
 - [ ] Dependabot
 - [ ] Release to store
 - [ ] Search patterns
